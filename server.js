@@ -1,3 +1,15 @@
+/*********************************************************************************
+*  WEB322 – Assignment 02
+*  I declare that this assignment is my own work in accordance with Seneca  Academic Policy.  No part *  of this assignment has been copied manually or electronically from any other source 
+*  (including 3rd party web sites) or distributed to other students.
+* 
+*  Name: Glenn Parreno Student ID: 115814196 Date: 22-04-2022
+*
+*  Online (Heroku) URL: https://stormy-lake-62025.herokuapp.com/about
+*
+*  GitHub Repository URL: https://github.com/BoorgerFlippr/web322-assignment2.git
+*
+********************************************************************************/
 var express = require("express")
 var app = express();
 var blogService = require("./blog-service.js")
