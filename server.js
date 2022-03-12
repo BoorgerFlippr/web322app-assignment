@@ -10,11 +10,40 @@
 *  GitHub Repository URL: https://github.com/BoorgerFlippr/web322-assignment2.git
 *
 ********************************************************************************/
+//express from a2
 const express = require("express")
+//multer + others from a3
 const multer = require("multer")
 const cloudinary = require(`cloudinary`).v2
 const streamifier = require(`streamifier`)
+//express handlebars from a4
+const exphbs = require('express-handlebars')
+
 var app = express();
+
+app.engine('.hbs', exphbs.engine({
+    extname: '.hbs',
+    helpers:{
+        navLink: function(url, options){
+            return '<li' + 
+                ((url == app.locals.activeRoute) ? ' class="active" ' : '') + 
+                '><a href="' + url + '">' + options.fn(this) + '</a></li>';
+        },
+        equal: function (lvalue, rvalue, options) {
+            if (arguments.length < 3)
+                throw new Error("Handlebars Helper equal needs 2 parameters");
+            if (lvalue != rvalue) {
+                return options.inverse(this);
+            } else {
+                return options.fn(this);
+            }
+        }
+        
+        
+    }}))
+    
+app.set('view engine', '.hbs')
+
 var blogService = require("./blog-service.js")
 
 var HTTP_PORT = process.env.PORT || 8080
@@ -34,6 +63,16 @@ function onHttpStart()
     console.log("Express http server listening on " + HTTP_PORT)
 }
 
+//routes
+
+app.use(function(req,res,next){
+    let route = req.path.substring(1);
+    app.locals.activeRoute = (route == "/") ? "/" : "/" + route.replace(/\/(.*)/, "");
+    app.locals.viewingCategory = req.query.category;
+    next();
+})
+
+
 app.get('/', function(req, res)
 {
     res.redirect('/about')
@@ -41,12 +80,20 @@ app.get('/', function(req, res)
 
 app.get('/about', function (req, res)
 {
-    res.sendFile('./views/about.html', {root:__dirname})
+    res.render('about',
+    {
+        data:null,
+        layout: "main"
+    })
 })
 
 app.get('/posts/add', function (req, res)
 {
-    res.sendFile('./views/addPost.html', {root:__dirname})
+    res.render('addPost',
+    {
+        data:null,
+        layout: "main"
+    })
 })
 
 app.get("/blog", function (req, res)
