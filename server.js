@@ -41,7 +41,7 @@ app.engine('.hbs', exphbs.engine({
         
         
     }}))
-    
+
 app.set('view engine', '.hbs')
 
 var blogService = require("./blog-service.js")
@@ -114,7 +114,7 @@ app.get("/posts", function (req, res)
     {
         blogService.getPostsByCategory(req.query.category).then((data) =>
         {
-            res.json({data})
+            res.render("posts",{posts:data})
         }).catch((err) =>
         {
             res.json({message: err})
@@ -124,7 +124,7 @@ app.get("/posts", function (req, res)
     {
         blogService.getPostsByMinDate(req.query.minDate).then((data) =>
         {
-            res.json({data})
+            res.render("posts",{posts:data})
         }).catch((err) =>
         {
             res.json({message: err})
@@ -134,10 +134,10 @@ app.get("/posts", function (req, res)
     {
         blogService.getAllPosts().then((data) =>
         {
-            res.json({data})
+            res.render("posts",{posts:data})
         }).catch((err) =>
         {
-            res.json({message: err})
+            res.render("posts",{message: "no results"})
         })
     }
 })
