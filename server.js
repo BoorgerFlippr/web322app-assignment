@@ -158,10 +158,10 @@ app.get("/categories", function (req, res)
     //res.send("<p>/categories not available.<p>")
     blogService.getCategories().then((data) =>
     {
-        res.json({data})
+        res.render("categories", {categories: data});
     }).catch((err) =>
     {
-        res.json({message: err})
+        res.render("categories", {message: "no results"});
     })
 })
 
