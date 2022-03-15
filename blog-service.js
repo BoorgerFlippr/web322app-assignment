@@ -161,7 +161,7 @@ exports.getPostsByMinDate = (minDateStr) =>
     })
 }
 
-exports.getPostsById = (id) =>
+exports.getPostById = (id) =>
 {
     return new Promise ((resolve, reject) =>
     {
