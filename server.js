@@ -79,7 +79,7 @@ app.use(function(req,res,next){
 
 app.get('/', function(req, res)
 {
-    res.redirect('/about')
+    res.redirect('/blog')
 })
 
 app.get('/about', function (req, res)

@@ -111,6 +111,9 @@ exports.addPost = (postData) =>
         postData.published = true;
     }
 
+    let today = new Date()
+    //var date = today.getFullYear+'/'+(today.getMonth()+1)+'/'+today.getDate()
+    postData.postDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
     postData.id = posts.length + 1
     posts.push(postData)
 
