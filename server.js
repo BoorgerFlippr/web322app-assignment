@@ -7,7 +7,7 @@
 *
 *  Online (Heroku) URL: https://stormy-lake-62025.herokuapp.com/about
 *
-*  GitHub Repository URL: https://github.com/BoorgerFlippr/web322-assignment2.git
+*  GitHub Repository URL: https://github.com/BoorgerFlippr/web322app-assignment
 *
 ********************************************************************************/
 //express from a2
@@ -74,7 +74,7 @@ app.use(function(req,res,next){
     app.locals.activeRoute = (route == "/") ? "/" : "/" + route.replace(/\/(.*)/, "");
     app.locals.viewingCategory = req.query.category;
     next();
-})
+});
 
 
 app.get('/', function(req, res)
