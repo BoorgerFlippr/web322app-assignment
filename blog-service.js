@@ -165,7 +165,7 @@ exports.getPostById = (id) =>
 {
     return new Promise ((resolve, reject) =>
     {
-        var thePost = posts.filter(posts => posts.id == id)
+        var thePost = posts.find(posts => posts.id == id)
         if (thePost.length == 0)
         {
             reject("no result returned")
