@@ -5,7 +5,7 @@
 * 
 *  Name: Glenn Parreno Student ID: 115814196 Date: 22-04-2022
 *
-*  Online (Heroku) URL: https://stormy-lake-62025.herokuapp.com/about
+*  Online (Heroku) URL: https://stormy-lake-62025.herokuapp.com/blog
 *
 *  GitHub Repository URL: https://github.com/BoorgerFlippr/web322app-assignment
 *
