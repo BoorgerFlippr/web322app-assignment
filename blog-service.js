@@ -67,6 +67,24 @@ exports.getPublishedPosts = () =>
     })
 }
 
+exports.getPublishedPostsByCategory = (category) =>
+{
+    return new Promise ((resolve,reject) =>
+    {
+        var isPublished = posts.filter(posts => posts.published == true && posts.category == category)
+        var thisCategory = posts.filter(posts => posts.category == category)
+
+        if (isPublished.length == 0)
+        {
+            reject('no results returned')
+        }
+        else
+        {
+            resolve(isPublished)
+        }
+    })
+}
+
 exports.getCategories = () =>
 {
     return new Promise ((resolve,reject) =>
