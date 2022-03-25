@@ -1,5 +1,5 @@
 /*********************************************************************************
-*  WEB322 – Assignment 04
+*  WEB322 – Assignment 05
 *  I declare that this assignment is my own work in accordance with Seneca  Academic Policy.  No part *  of this assignment has been copied manually or electronically from any other source 
 *  (including 3rd party web sites) or distributed to other students.
 * 
@@ -40,10 +40,13 @@ app.engine('.hbs', exphbs.engine({
         },
         safeHTML: function(context){
             return stripJs(context);
-        }
-        
-        
-        
+        },
+        formatDate: function(dateObj){
+            let year = dateObj.getFullYear();
+            let month = (dateObj.getMonth() + 1).toString();
+            let day = dateObj.getDate().toString();
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2,'0')}`;
+        }        
     }}))
 
 app.set('view engine', '.hbs')
@@ -76,6 +79,7 @@ app.use(function(req,res,next){
     next();
 });
 
+app.use(express.urlencoded({extended: true}));
 
 app.get('/', function(req, res)
 {
@@ -93,10 +97,19 @@ app.get('/about', function (req, res)
 
 app.get('/posts/add', function (req, res)
 {
-    res.render('addPost',
+    blogData.getCategories().then((data) =>
     {
-        data:null,
-        layout: "main"
+        res.render("addPost",
+        {categories:data,
+            layout:"main"
+        })
+
+    }).catch((err) =>
+    {
+        res.render("addPost",
+        {categories:[],
+            layout:"main"
+        })
     })
 })
 
@@ -204,7 +217,14 @@ app.get("/posts", function (req, res)
     {
         blogData.getPostsByCategory(req.query.category).then((data) =>
         {
-            res.render("posts",{posts:data})
+            if(data.length > 0)
+            {
+                res.render("posts",{posts:data})                
+            }
+            else
+            {
+                res.render("posts",{message:"no results"})
+            }
         }).catch((err) =>
         {
             res.json({message: err})
@@ -214,7 +234,14 @@ app.get("/posts", function (req, res)
     {
         blogData.getPostsByMinDate(req.query.minDate).then((data) =>
         {
-            res.render("posts",{posts:data})
+            if(data.length > 0)
+            {
+                res.render("posts",{posts:data})                
+            }
+            else
+            {
+                res.render("posts",{message:"no results"})
+            }
         }).catch((err) =>
         {
             res.json({message: err})
@@ -224,7 +251,14 @@ app.get("/posts", function (req, res)
     {
         blogData.getAllPosts().then((data) =>
         {
-            res.render("posts",{posts:data})
+            if(data.length > 0)
+            {
+                res.render("posts",{posts:data})                
+            }
+            else
+            {
+                res.render("posts",{message:"no results"})
+            }
         }).catch((err) =>
         {
             res.render("posts",{message: "no results"})
@@ -248,10 +282,25 @@ app.get("/categories", function (req, res)
     //res.send("<p>/categories not available.<p>")
     blogData.getCategories().then((data) =>
     {
-        res.render("categories", {categories: data});
+        if(categories.length > 0)
+        {
+            res.render("categories",{categories:data})
+        }
+        else{
+            res.render("categories",{message: "no results"})
+        }
     }).catch((err) =>
     {
         res.render("categories", {message: "no results"});
+    })
+})
+
+app.get('/categories/add', function (req, res)
+{
+    res.render('addCategory',
+    {
+        data:null,
+        layout: "main"
     })
 })
 
@@ -289,6 +338,28 @@ app.post("/posts/add", upload.single("featureImage"), function (req,res)
         })
     
     });
+})
+
+app.post('/categories/add', function (req, res)
+{
+    blogData.addCategory(req.body).then(() =>
+    {
+      res.redirect("/categories")  
+    })
+})
+
+app.get('/categories/delete/:id', function (req, res)
+{
+    blogData.deleteCategoryById(req.params.value)
+    .then(res.redirect("/categories"))
+    .catch(err => res.status(500).send("Unable to Remove Category / Category not found"))
+})
+
+app.get('/posts/delete/:id', function (req,res)
+{
+    blogData.deletePostById(req.params.value)
+    .then(res.redirect("/posts"))
+    .catch(err => res.status(500).send("Unable to Remove Category / Category not found"))
 })
 
 app.get("/*", function (req, res)
