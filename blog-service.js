@@ -31,8 +31,8 @@ exports.initialize = () =>
     return new Promise ((resolve, reject) =>
     {
         sequelize.sync()
-        .then(resolve('Success! Database is synced.'))
-        .catch(reject('Unable to sync the database.'))
+        .then(() => resolve(console.log('Success!')))
+        .catch((error) => reject(console.log(error)))
     })
 }
 
@@ -41,8 +41,8 @@ exports.getAllPosts = () =>
     return new Promise ((resolve, reject) =>
     {
         Post.findAll()
-        .then(data => resolve(data))
-        .catch(reject('No results returned.'))
+        .then((data)=> resolve(console.log(data)))
+        .catch((error) => reject(console.log(error)))
     })
 }
 
@@ -55,8 +55,8 @@ exports.getPublishedPosts = () =>
             {
                 published: true
             }
-            .then(data => resolve(data))
-            .catch(reject('No results returned.'))
+            .then((data)=> resolve(console.log(data)))
+            .catch((error) => reject(console.log(error)))
         })
     })
 }
@@ -71,8 +71,8 @@ exports.getPublishedPostsByCategory = (category) =>
                 published: true,
                 category: category
             }
-            .then(data => resolve(data))
-            .catch(reject('No results returned.'))
+            .then((data)=> resolve(console.log(data)))
+            .catch((error) => reject(console.log(error)))
         })
     })
 }
@@ -82,8 +82,8 @@ exports.getCategories = () =>
     return new Promise ((resolve, reject) =>
     {
         Category.findAll()
-        .then(data => resolve(data))
-        .catch(reject('No results returned.'))
+        .then((data)=> resolve(console.log(data)))
+        .catch((error) => reject(console.log(error)))
     })
 }
 
@@ -100,8 +100,8 @@ exports.addPost = (postData) =>
         postData.postDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
 
         Post.create(postData)
-        .then(resolve('Post successfuly created!'))
-        .catch(reject('Unable to create post.'))
+        .then(() => resolve(console.log('Added post successfuly!')))
+        .catch((error) => reject(console.log(error)))
 
     })
 }
@@ -116,8 +116,8 @@ exports.getPostsByCategory = (category) =>
                 category: category
             }
         })
-        .then(data => resolve(data))
-        .catch(reject('No results returned.'))
+        .then((data)=> resolve(console.log(data)))
+        .catch((error) => reject(console.log(error)))
     })
 }
 
@@ -136,8 +136,8 @@ exports.getPostsByMinDate = (minDateStr) =>
                 }
             }
         })
-        .then(data => resolve(data))
-        .catch(reject('No results returned.'))
+        .then((data)=> resolve(console.log(data)))
+        .catch((error) => reject(console.log(error)))
     })
 }
 
@@ -151,8 +151,8 @@ exports.getPostById = (id) =>
                 id:id
             }
         })
-        .then(data => resolve(data))
-        .catch(reject('No results returned.'))
+        .then((data)=> resolve(console.log(data)))
+        .catch((error) => reject(console.log(error)))
     })
 }
 
@@ -166,8 +166,8 @@ exports.addCategory = (categoryData) =>
         }
 
         Category.create(categoryData)
-        .then(resolve('Category successfuly created!'))
-        .catch(reject('Unable to create category.'))
+        .then(() => resolve(console.log('Added category successfuly!')))
+        .catch((error) => reject(console.log(error)))
     })
 }
 
@@ -181,8 +181,8 @@ exports.deleteCategoryById = (id) =>
                 id:id
             }
         })
-        .then(resolve())
-        .catch(reject('Deletion failed'))
+        .then(() => resolve(console.log('deleted category successfuly!')))
+        .catch((error) => reject(console.log(error)))
     })
 }
 
@@ -196,7 +196,7 @@ exports.deletePostById = (id) =>
                 id:id
             }
         })
-        .then(resolve())
-        .catch(reject('Deletion failed'))
+        .then(() => resolve(console.log('Added post successfuly!')))
+        .catch((error) => reject(console.log(error)))
     })
 }

@@ -261,7 +261,7 @@ app.get("/posts", function (req, res)
             }
         }).catch((err) =>
         {
-            res.render("posts",{message: "no results"})
+            res.render("posts",{message: err})
         })
     }
 })
@@ -282,7 +282,7 @@ app.get("/categories", function (req, res)
     //res.send("<p>/categories not available.<p>")
     blogData.getCategories().then((data) =>
     {
-        if(categories.length > 0)
+        if(data.length > 0)
         {
             res.render("categories",{categories:data})
         }
@@ -291,7 +291,7 @@ app.get("/categories", function (req, res)
         }
     }).catch((err) =>
     {
-        res.render("categories", {message: "no results"});
+        res.render("categories", {message: err});
     })
 })
 
