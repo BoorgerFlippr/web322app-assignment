@@ -261,7 +261,7 @@ app.get("/posts", function (req, res)
             }
         }).catch((err) =>
         {
-            res.render("posts",{message: err})
+            res.render("posts",{message: "no results"})
         })
     }
 })
@@ -279,11 +279,10 @@ app.get("/post/:value", function (req, res)
 
 app.get("/categories", function (req, res)
 {
-    let viewData = {}
+    //res.send("<p>/categories not available.<p>")
     blogData.getCategories().then((data) =>
     {
-        viewData.categories = data
-        if(viewData.categories.length > 0)
+        if(data.length > 0)
         {
             res.render("categories",{categories:data})
         }
