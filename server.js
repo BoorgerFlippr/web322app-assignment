@@ -279,10 +279,11 @@ app.get("/post/:value", function (req, res)
 
 app.get("/categories", function (req, res)
 {
-    //res.send("<p>/categories not available.<p>")
+    let viewData = {}
     blogData.getCategories().then((data) =>
     {
-        if(data.length > 0)
+        viewData.categories = data
+        if(viewData.categories.length > 0)
         {
             res.render("categories",{categories:data})
         }
