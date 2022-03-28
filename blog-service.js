@@ -182,7 +182,7 @@ exports.deleteCategoryById = (id) =>
             }
         })
         .then(() => resolve())
-        .catch((error) => reject(console.log(error)))
+        .catch((error) => reject(error))
     })
 }
 
@@ -197,6 +197,6 @@ exports.deletePostById = (id) =>
             }
         })
         .then(() => resolve())
-        .catch((error) => reject(console.log(error)))
+        .catch((error) => reject(error))
     })
 }
