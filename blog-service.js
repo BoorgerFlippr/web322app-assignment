@@ -41,7 +41,7 @@ exports.getAllPosts = () =>
     return new Promise ((resolve, reject) =>
     {
         Post.findAll()
-        .then((data)=> resolve(console.log(data)))
+        .then((data)=> resolve(data))
         .catch((error) => reject(console.log(error)))
     })
 }
@@ -55,7 +55,7 @@ exports.getPublishedPosts = () =>
             {
                 published: true
             }
-            .then((data)=> resolve(console.log(data)))
+            .then((data)=> resolve(data))
             .catch((error) => reject(console.log(error)))
         })
     })
@@ -71,7 +71,7 @@ exports.getPublishedPostsByCategory = (category) =>
                 published: true,
                 category: category
             }
-            .then((data)=> resolve(console.log(data)))
+            .then((data)=> resolve(data))
             .catch((error) => reject(console.log(error)))
         })
     })
@@ -82,7 +82,7 @@ exports.getCategories = () =>
     return new Promise ((resolve, reject) =>
     {
         Category.findAll()
-        .then((data)=> resolve(console.log(data)))
+        .then((data)=> resolve(data))
         .catch((error) => reject(console.log(error)))
     })
 }
@@ -116,7 +116,7 @@ exports.getPostsByCategory = (category) =>
                 category: category
             }
         })
-        .then((data)=> resolve(console.log(data)))
+        .then((data)=> resolve(data))
         .catch((error) => reject(console.log(error)))
     })
 }
@@ -151,7 +151,7 @@ exports.getPostById = (id) =>
                 id:id
             }
         })
-        .then((data)=> resolve(console.log(data)))
+        .then((data)=> resolve(data))
         .catch((error) => reject(console.log(error)))
     })
 }
@@ -181,7 +181,7 @@ exports.deleteCategoryById = (id) =>
                 id:id
             }
         })
-        .then(() => resolve(console.log('deleted category successfuly!')))
+        .then(() => resolve())
         .catch((error) => reject(console.log(error)))
     })
 }
@@ -196,7 +196,7 @@ exports.deletePostById = (id) =>
                 id:id
             }
         })
-        .then(() => resolve(console.log('Added post successfuly!')))
+        .then(() => resolve())
         .catch((error) => reject(console.log(error)))
     })
 }
