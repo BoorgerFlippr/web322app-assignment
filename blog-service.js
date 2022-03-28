@@ -55,7 +55,7 @@ exports.getPublishedPosts = () =>
             {
                 published: true
             }
-            .then((data)=> resolve(data))
+            .then(resolve(Post.findAll({where:{published: true}})))
             .catch((error) => reject(console.log(error)))
         })
     })
@@ -71,7 +71,7 @@ exports.getPublishedPostsByCategory = (category) =>
                 published: true,
                 category: category
             }
-            .then((data)=> resolve(data))
+            .then(resolve(Post.findAll({where:{published: true, category:category}})))
             .catch((error) => reject(console.log(error)))
         })
     })
@@ -116,7 +116,7 @@ exports.getPostsByCategory = (category) =>
                 category: category
             }
         })
-        .then((data)=> resolve(data))
+        .then(resolve(Post.findAll({where:{category:category}})))
         .catch((error) => reject(console.log(error)))
     })
 }
@@ -136,7 +136,7 @@ exports.getPostsByMinDate = (minDateStr) =>
                 }
             }
         })
-        .then((data)=> resolve(console.log(data)))
+        .then(resolve(Post.findAll({where:{postDate:{[gte]:new Date(minDateStr)}}})))
         .catch((error) => reject(console.log(error)))
     })
 }
@@ -151,7 +151,7 @@ exports.getPostById = (id) =>
                 id:id
             }
         })
-        .then((data)=> resolve(data))
+        .then(resolve(Post.findAll({where:{id:id}})))
         .catch((error) => reject(console.log(error)))
     })
 }
@@ -182,7 +182,7 @@ exports.deleteCategoryById = (id) =>
             }
         })
         .then(() => resolve())
-        .catch((error) => reject(error))
+        .catch((error) => reject(console.log(error)))
     })
 }
 

@@ -350,14 +350,14 @@ app.post('/categories/add', function (req, res)
 
 app.get('/categories/delete/:id', function (req, res)
 {
-    blogData.deleteCategoryById(req.params.value)
+    blogData.deleteCategoryById(req.params.id)
     .then(res.redirect("/categories"))
     .catch(err => res.status(500).send("Unable to Remove Category / Category not found"))
 })
 
 app.get('/posts/delete/:id', function (req,res)
 {
-    blogData.deletePostById(req.params.value)
+    blogData.deletePostById(req.params.id)
     .then(res.redirect("/posts"))
     .catch(err => res.status(500).send("Unable to Remove Category / Category not found"))
 })
