@@ -151,7 +151,7 @@ exports.getPostById = (id) =>
                 id:id
             }
         })
-        .then(resolve(Post.findAll({where:{id:id}})))
+        .then(data=> resolve(data[0]))
         .catch((error) => reject(console.log(error)))
     })
 }
