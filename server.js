@@ -1,9 +1,9 @@
 /*********************************************************************************
-*  WEB322 – Assignment 05
+*  WEB322 – Assignment 06
 *  I declare that this assignment is my own work in accordance with Seneca  Academic Policy.  No part *  of this assignment has been copied manually or electronically from any other source 
 *  (including 3rd party web sites) or distributed to other students.
 * 
-*  Name: Glenn Parreno Student ID: 115814196 Date: 22-04-2022
+*  Name: Glenn Parreno Student ID: 115814196 Date: 04-04-2022
 *
 *  Online (Heroku) URL: https://stormy-lake-62025.herokuapp.com/blog
 *
@@ -52,6 +52,7 @@ app.engine('.hbs', exphbs.engine({
 app.set('view engine', '.hbs')
 
 const blogData = require("./blog-service.js")
+const authData = require("./auth-service.js")
 
 var HTTP_PORT = process.env.PORT || 8080
 
@@ -367,13 +368,10 @@ app.get("/*", function (req, res)
     res.status(404).send("Not found")
 })
 
-//app.listen(HTTP_PORT, onHttpStart)
-
-
-blogData.initialize().then(() =>
-{
+blogData.initialize()
+.then(authData.initialize())
+.then(() =>{
     app.listen(HTTP_PORT, onHttpStart())
-}).catch (() =>
-{
-    console.log('promise unfulfiled')
+}).catch(() => {
+    console.log("Unable to start server")
 })
