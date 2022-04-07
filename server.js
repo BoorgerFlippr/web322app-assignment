@@ -20,6 +20,8 @@ const streamifier = require(`streamifier`)
 const exphbs = require('express-handlebars')
 const stripJs = require('strip-js')
 var app = express();
+//a6
+const clientSessions = require('client-sessions')
 
 app.engine('.hbs', exphbs.engine({
     extname: '.hbs',
@@ -71,6 +73,26 @@ function onHttpStart()
     console.log("Express http server listening on " + HTTP_PORT)
 }
 
+//cookies
+app.use(clientSessions({
+    cookieName: "session",
+    secret: "web322_app_a6",
+    duration: 2 * 60 * 1000,
+    activeDuration: 1000 * 60
+}))
+
+app.use(function(req, res, next){
+    res.locals.session = req.session
+    next()
+})
+
+function ensureLogin(req, res, next) {
+    if (!req.session.user) {
+        res.redirect("/login")
+    } else {
+        next()
+    }
+}
 //routes
 
 app.use(function(req,res,next){
@@ -96,7 +118,7 @@ app.get('/about', function (req, res)
     })
 })
 
-app.get('/posts/add', function (req, res)
+app.get('/posts/add', ensureLogin, function (req, res)
 {
     blogData.getCategories().then((data) =>
     {
@@ -212,7 +234,7 @@ app.get('/blog/:id', async (req, res) => {
     res.render("blog", {data: viewData})
 });
 
-app.get("/posts", function (req, res)
+app.get("/posts", ensureLogin, function (req, res)
 {
     if(req.query.category)
     {
@@ -267,7 +289,7 @@ app.get("/posts", function (req, res)
     }
 })
 
-app.get("/post/:value", function (req, res)
+app.get("/post/:value", ensureLogin, function (req, res)
 {
     blogData.getPostsById(req.params.value).then((data) =>
     {
@@ -278,7 +300,7 @@ app.get("/post/:value", function (req, res)
     })
 })
 
-app.get("/categories", function (req, res)
+app.get("/categories", ensureLogin, function (req, res)
 {
     //res.send("<p>/categories not available.<p>")
     blogData.getCategories().then((data) =>
@@ -296,7 +318,7 @@ app.get("/categories", function (req, res)
     })
 })
 
-app.get('/categories/add', function (req, res)
+app.get('/categories/add', ensureLogin, function (req, res)
 {
     res.render('addCategory',
     {
@@ -305,7 +327,7 @@ app.get('/categories/add', function (req, res)
     })
 })
 
-app.post("/posts/add", upload.single("featureImage"), function (req,res) 
+app.post("/posts/add", ensureLogin, upload.single("featureImage"), function (req,res) 
 {
     let streamUpload = (req) => {
         return new Promise((resolve, reject) => {
@@ -341,7 +363,7 @@ app.post("/posts/add", upload.single("featureImage"), function (req,res)
     });
 })
 
-app.post('/categories/add', function (req, res)
+app.post('/categories/add', ensureLogin, function (req, res)
 {
     blogData.addCategory(req.body).then(() =>
     {
@@ -349,14 +371,14 @@ app.post('/categories/add', function (req, res)
     })
 })
 
-app.get('/categories/delete/:id', function (req, res)
+app.get('/categories/delete/:id', ensureLogin, function (req, res)
 {
     blogData.deleteCategoryById(req.params.id)
     .then(res.redirect("/categories"))
     .catch(err => res.status(500).send("Unable to Remove Category / Category not found"))
 })
 
-app.get('/posts/delete/:id', function (req,res)
+app.get('/posts/delete/:id', ensureLogin, function (req,res)
 {
     blogData.deletePostById(req.params.id)
     .then(res.redirect("/posts"))
