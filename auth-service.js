@@ -18,13 +18,13 @@ let User
 
 module.exports.initialize = function () {
     return new Promise(function (resolve, reject) {
-        let db = mongoose.createConnection("mongodb+srv://Glenn:1230321glenn@senecaweb.j0rut.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
+        let db = mongoose.createConnection("mongodb+srv://Glenn:1230321glenn@senecaweb.j0rut.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 
         db.on('error', (err)=>{
             reject(err); // reject the promise with the provided error
         });
         db.once('open', ()=>{
-           User = db.model("users", userSchema);
+           User = db.model("Users", userSchema);
            resolve();
         });
     });
