@@ -1,4 +1,4 @@
-var mongoose = require("mongoose")
+var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 var userSchema = new Schema({
@@ -18,7 +18,7 @@ let User
 
 module.exports.initialize = function () {
     return new Promise(function (resolve, reject) {
-        let db = mongoose.createConnection("mongodb+srv://Glenn:1230321glenn@senecaweb.j0rut.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+        let db = mongoose.createConnection("mongodb+srv://Glenn:812486352@senecaweb.j0rut.mongodb.net/assignment6?retryWrites=true&w=majority", {useNewUrlParser:true})
 
         db.on('error', (err)=>{
             reject(err); // reject the promise with the provided error
