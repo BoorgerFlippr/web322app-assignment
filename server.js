@@ -385,6 +385,53 @@ app.get('/posts/delete/:id', ensureLogin, function (req,res)
     .catch(err => res.status(500).send("Unable to Remove Category / Category not found"))
 })
 
+//a6 routess
+app.get('/login', (req, res) => 
+{
+    res.render("login")
+})
+
+app.get('/register', (req, res) =>
+{
+    res.render("register")
+})
+
+app.post('/register', (req, res) =>
+{
+    authData.registerUser(req.body)
+    .then(() => res.render("register", {successMessage: "User created"}))
+    .catch(err => res.render("register", {errorMessage: err, userName: req.body.userName}))
+})
+
+
+app.post('/login', (req, res) =>
+{
+    req.body.userAgent = req.get('User-Agent')
+
+    authData.checkUser(req.body).then((user) => {
+        req.session.user = {
+            userName:user.userName,
+            email:user.email,
+            loginHistory:user.loginHistory
+        }
+        res.redirect('/posts')
+    })
+    .catch(err => {
+        res.render("login", {errorMessage:err, userName:req.body.userName})
+    })
+})
+
+app.get('/logout', (req,res) =>
+{
+    req.session.reset()
+    res.redirect('/login')
+})
+
+app.get('/userHistory', ensureLogin, (req,res) => 
+{
+    res.render("userHistory")
+})
+
 app.get("/*", function (req, res)
 {
     res.status(404).send("Not found")
