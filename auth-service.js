@@ -1,4 +1,5 @@
 var mongoose = require('mongoose')
+const bcrypt = require('bcryptjs')
 var Schema = mongoose.Schema
 
 var userSchema = new Schema({
@@ -30,7 +31,7 @@ module.exports.initialize = function () {
     });
 };
 
-module.exports.registerUser = function (userData) {
+/**module.exports.registerUser = function (userData) {
     return new Promise((resolve, reject) => {
         if(userData.password != userData.password2) {
             reject("Passwords do not match")
@@ -52,9 +53,45 @@ module.exports.registerUser = function (userData) {
             })
         }
     })   
+} */
+
+
+module.exports.registerUser = function (userData) {
+    return new Promise((resolve, reject) => {
+        if(userData.password != userData.password2) {
+            reject("Passwords do not match")
+        }
+        else {
+            bcrypt.genSalt(10, function (err, salt){
+                bcrypt.hash(userData.password, salt, function(err, hash) {
+                    if(err) {
+                        reject("error encrypting password")
+                    }
+                    else {
+                        userData.password = hash
+                        let newUser = new User(userData)
+                        newUser.save((err) => {
+                            if(err) {
+                                if(err.code === 11000) {
+                                    reject("User Name already taken")
+                                }
+                                else {
+                                    reject("There was an error creating the user: " + err)
+                                }
+                            }
+                            else
+                            {
+                                resolve()
+                            }
+                        })
+                    }
+                })
+            })
+        }
+    })
 }
 
-module.exports.checkUser = function (userData) {
+/**module.exports.checkUser = function (userData) {
     return new Promise((resolve, reject) => {
         User.find({userName:userData.userName})
         .exec()
@@ -79,6 +116,34 @@ module.exports.checkUser = function (userData) {
         })
         .catch(()=>{
             reject("Unable to find user: " + userData.userName)
+        })
+    })
+} */
+
+module.exports.checkUser = function (userData) {
+    return new Promise((resolve, reject) => {
+        User.find({userName: userData.userName})
+        .exec()
+        .then(users => {
+            bcrypt.compare(userData.password, users[0].password).then(res=> {
+                if(res === true) {
+                    users[0].loginHistory.push({dateTime: (new Date()).toString(), userAgent:userData.userAgent})
+                    User.update(
+                        {userName: users[0].userName},
+                        {$set: {loginHistory: users[0].loginHistory}},
+                        {multi: false}
+                    )
+                    .exec()
+                    .then(() => {resolve(users[0])})
+                    .catch(err => {reject("There was an error verifying the user: " + err)})
+                }
+                else {
+                    reject("Incorrect Password for the user: " + userData.userName)
+                }
+            })
+        })
+        .catch(() => {
+            reject("Unableto find user: " + userData.userName)
         })
     })
 }
